@@ -3,6 +3,7 @@ interface Contact{
     name: string;
     birthDate?: Date;
     status: ContactStatus;
+    clone(name:string): Contact;
 }
 
 enum ContactStatus {
@@ -11,8 +12,6 @@ enum ContactStatus {
     New = "new"
 }
 
-let primaryContact: Contact = {
-    id: 12345,
-    name: "Jamie Johnson",
-    status: ContactStatus.Active
+function clone(source: Contact): Contact{
+    return Object.apply({}, source);
 }
