@@ -1,18 +1,18 @@
-interface Contact extends Address{
+interface Contact{
     id: number;
     name: string;
     birthDate?: Date;
+    status: ContactStatus;
 }
 
-interface Address {
-    line1: string;
-    line2: string;
-    province: string;
-    region: string;
-    postalCode: string;
+enum ContactStatus {
+    Active = "active",
+    Inactive = "inactive",
+    New = "new"
 }
 
 let primaryContact: Contact = {
     id: 12345,
-    name: "Jamie Johnson"
+    name: "Jamie Johnson",
+    status: ContactStatus.Active
 }
