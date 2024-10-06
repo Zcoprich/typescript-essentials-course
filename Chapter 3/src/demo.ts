@@ -1,3 +1,8 @@
+const x = "string"
+const y = true
+console.log(typeof x) // --> result: "string"
+console.log(typeof y)// --> result: "boolean"
+
 type ContactName = string;
 
 type ContactStatus = "active" | "inactive" | "new"
@@ -9,9 +14,31 @@ interface Contact {
     name: ContactName;
     birthDate?: ContactBirthDate;
     status?: ContactStatus;
-    email: string;
+    //email: string;
 }
 
+function toContact(nameOrContact: string | Contact): Contact{
+    if (typeof nameOrContact === "object"){
+        return{
+            id: nameOrContact.id,
+            name: nameOrContact.name,
+            status: nameOrContact.status
+        }
+    }
+    else{
+        return{
+            id: 0,
+            name: nameOrContact,
+            status: "active"
+        }
+    }
+}
+
+const myType = {min: 1, max :200}
+
+function save(source: typeof myType){}
+
+/* Code not covered in Ch 3 Ep. 3
 interface Address {
     line1: string;
     line2: string;
@@ -46,4 +73,4 @@ function getValue<T, U extends keyof T>(source: T, propertyName: U){
     return source[propertyName] //returns value of object's property dynamically via Javascript object index syntax
 }
 
-const value = getValue(contact, "status")
+const value = getValue(contact, "status") */
