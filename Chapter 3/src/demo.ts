@@ -9,6 +9,7 @@ interface Contact {
     name: ContactName;
     birthDate?: ContactBirthDate;
     status?: ContactStatus;
+    email: string;
 }
 
 interface Address {
@@ -38,3 +39,11 @@ let primaryContact: Contact = {
     name: "Jamie Johnson",
     status: "new"
 }
+
+type ContactFields = keyof Contact
+
+function getValue<T, U extends keyof T>(source: T, propertyName: U){
+    return source[propertyName] //returns value of object's property dynamically via Javascript object index syntax
+}
+
+const value = getValue(contact, "status")
