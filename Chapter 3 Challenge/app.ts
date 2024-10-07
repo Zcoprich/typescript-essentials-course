@@ -1,6 +1,10 @@
 function query<T>(
     items: T[],
-    query: any // <--- replace this!
+    //query: Record<keyof T, (val: T[keyof T]) => boolean> // Soluation 1 using Record (still causes Error)
+    
+    query: {
+        [TProp in keyof T]?: (val: T[TProp]) => boolean // Solution 2 using Index Accessor
+    } 
 ) {
     return items.filter(item => {
         // iterate through each of the item's properties
