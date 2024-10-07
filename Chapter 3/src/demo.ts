@@ -27,24 +27,34 @@ interface Query{
     matches(val): boolean;
 }
 
-function searchContacts(contacts: Contact[], query: Record<keyof Contact, Query>) {
+type ContactQuery = Partial<
+    Pick<
+        Record<keyof Contact, Query>,
+        "id" | "name"
+        >
+    >
+
+type RequiredContactQuery = Required<ContactQuery>
+
+function searchContacts(contacts: Contact[], query: ContactQuery) {
     return contacts.filter(contact => {
-        for (const property of Object.keys(contact) as (keyof Contact)[]){
-            //get the query object of the property
+        for (const property of Object.keys(contact) as (keyof Contact)[]) {
+            // get the query object for this property
             const propertyQuery = query[property];
             // check to see if it matches
-            if(propertyQuery && propertyQuery.matches(contact[property])){
+            if (propertyQuery && propertyQuery.matches(contact[property])) {
                 return true;
             }
         }
+
         return false;
     })
 }
 
-//const filteredContacts = searchContacts(
-//    [/*Contacts */],
-//    {
-//        id:{matches: (id) => id === 123},
-//        name:{matches: (name) => name === "Carol Weaver"},
-//    }
-//);*/
+const filteredContacts = searchContacts(
+    [/*Contacts */],    
+    {
+       id:{matches: (id) => id === 123},
+       name:{matches: (name) => name === "Carol Weaver"},
+    }
+);
