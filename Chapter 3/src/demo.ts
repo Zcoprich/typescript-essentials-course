@@ -1,61 +1,19 @@
-/* Content removed in Ch 3.4
-const x = "string"
-const y = true
-console.log(typeof x) // --> result: "string"
-console.log(typeof y)// --> result: "boolean" 
+// Removed content not mentioned in Ch 3.5 to avoid clutter
 
-type ContactName = string; */
+let x: Record<string, string | number | boolean | Function> = {name: "Wruce Bayne"}
+x.number = 1234;
+x.status = true
+x.log = () => console.log("awesome!")
 
 type ContactStatus = "active" | "inactive" | "new"
-
-type ContactBirthDate = Date | number | string
 
 //modified in ch 3.4, removing birthDate and adding address
 interface Contact {
     id: number;
-    name: string; //changed from ContactName to string in Ch 3.4
+    name: string; 
     status?: ContactStatus;
     address: Address;
 }
-
-interface ContactEvent {
-    contactId: Contact["id"];
-}
-
-interface ContactDeletedEvent extends ContactEvent {}
-
-interface ContactStatusChangedEvent extends ContactEvent {
-    oldStatus: Contact["status"];
-    newStatus: Contact["status"];
-}
-
-interface ContactEvents{
-    deleted: ContactDeletedEvent;
-    statusChanged: ContactStatusChangedEvent;
-    // other events to be addressed
-}
-
-/* Code removed in Ch 3.4
-function toContact(nameOrContact: string | Contact): Contact{
-    if (typeof nameOrContact === "object"){
-        return{
-            id: nameOrContact.id,
-            name: nameOrContact.name,
-            status: nameOrContact.status
-        }
-    }
-    else{
-        return{
-            id: 0,
-            name: nameOrContact,
-            status: "active"
-        }
-    }
-}
-
-const myType = {min: 1, max :200}
-
-function save(source: typeof myType){} */
 
 // Modified in Ch 3.4
 interface Address {
@@ -64,44 +22,29 @@ interface Address {
     postalCode: string;
 }
 
-/* Code not covered in Ch 3.3
-type AddressableContact = Contact & Address
-
-function getBirthDate(contact: Contact) {
-    if (typeof contact.birthDate === "number") {
-        return new Date(contact.birthDate);
-    }
-    else if (typeof contact.birthDate === "string") {
-        return Date.parse(contact.birthDate)
-    }
-    else {
-        return contact.birthDate
-    }
+interface Query{
+    sort?: 'asc' | 'desc';
+    matches(val): boolean;
 }
 
-let primaryContact: Contact = {
-    id: 12345,
-    name: "Jamie Johnson",
-    status: "new"
-}
-
-type ContactFields = keyof Contact */
-
-// Available again in Ch 3.4
-function getValue<T, U extends keyof T>(source: T, propertyName: U){
-    return source[propertyName] //returns value of object's property dynamically via Javascript object index syntax
-}
-
-function handleEvent <T extends keyof ContactEvents>(
-    eventName: T, // name of property found in ContactEvents
-    handler: (evt: ContactEvents[T]) => void)
-    {
-        if(eventName === "statusChanged"){
-            handler({contactId: 1, oldStatus: "active", newStatus: "inactive"})
+function searchContacts(contacts: Contact[], query: Record<keyof Contact, Query>) {
+    return contacts.filter(contact => {
+        for (const property of Object.keys(contact) as (keyof Contact)[]){
+            //get the query object of the property
+            const propertyQuery = query[property];
+            // check to see if it matches
+            if(propertyQuery && propertyQuery.matches(contact[property])){
+                return true;
+            }
         }
+        return false;
+    })
+}
+
+const filteredContacts = searchContacts(
+    [/*Contacts */],
+    {
+        id:{matches: (id) => id === 123},
+        name:{matches: (name) => name === "Carol Weaver"},
     }
-
-handleEvent("statusChanged", evt => evt)
-
-/* Not addressed in Ch 3.3
-const value = getValue(contact, "status") */
+);
