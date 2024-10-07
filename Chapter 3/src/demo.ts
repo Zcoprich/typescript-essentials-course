@@ -41,10 +41,10 @@ function searchContacts(contacts: Contact[], query: Record<keyof Contact, Query>
     })
 }
 
-const filteredContacts = searchContacts(
-    [/*Contacts */],
-    {
-        id:{matches: (id) => id === 123},
-        name:{matches: (name) => name === "Carol Weaver"},
-    }
-);
+//const filteredContacts = searchContacts(
+//    [/*Contacts */],
+//    {
+//        id:{matches: (id) => id === 123},
+//        name:{matches: (name) => name === "Carol Weaver"},
+//    }
+//);*/
